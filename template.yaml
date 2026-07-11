@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Description: Serverless Help Desk - first vertical slice
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Timeout: 10
+    MemorySize: 256
+    Architectures:
+      - x86_64
+
+Resources:
+  TicketsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: ticketId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ticketId
+          KeyType: HASH
+
+  CreateTicketFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: create_ticket.app.lambda_handler
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TicketsTable
+      Events:
+        CreateTicketApi:
+          Type: Api
+          Properties:
+            Path: /tickets
+            Method: post
+
+Outputs:
+  ApiUrl:
+    Description: API endpoint for creating tickets
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/tickets"
+
+  TicketsTableName:
+    Description: DynamoDB tickets table
+    Value: !Ref TicketsTable

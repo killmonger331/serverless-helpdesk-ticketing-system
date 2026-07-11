@@ -1,0 +1,11 @@
+{
+  "resource": "/tickets",
+  "path": "/tickets",
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"title\":\"Unable to access VPN\",\"description\":\"VPN authentication fails after password reset.\",\"priority\":4,\"requesterEmail\":\"employee@example.com\"}",
+  "isBase64Encoded": false
+}
+
