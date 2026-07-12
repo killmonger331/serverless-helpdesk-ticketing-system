@@ -8,6 +8,11 @@ Globals:
     MemorySize: 256
     Architectures:
     - x86_64
+  Api:
+    Cors:
+      AllowMethods: '''POST,OPTIONS'''
+      AllowHeaders: '''Content-Type'''
+      AllowOrigin: '''http://localhost:5500'''
 Resources:
   TicketsTable:
     Type: AWS::DynamoDB::Table
