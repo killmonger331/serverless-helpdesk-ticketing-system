@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Submit Help Desk Ticket</title>
+</head>
+
+<body>
+  <main>
+    <h1>Submit a Help Desk Ticket</h1>
+
+    <form id="ticket-form">
+      <label for="title">Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        required
+      >
+
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        required
+      ></textarea>
+
+      <label for="priority">Priority</label>
+      <select id="priority" name="priority" required>
+        <option value="4">Priority 4 — Single user</option>
+        <option value="3">Priority 3 — Multiple users</option>
+        <option value="2">Priority 2 — Site-wide</option>
+        <option value="1">Priority 1 — Enterprise-wide</option>
+      </select>
+
+      <label for="requesterEmail">Email</label>
+      <input
+        id="requesterEmail"
+        name="requesterEmail"
+        type="email"
+        required
+      >
+
+      <button type="submit">Submit Ticket</button>
+    </form>
+
+    <p id="form-message" role="status"></p>
+  </main>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
