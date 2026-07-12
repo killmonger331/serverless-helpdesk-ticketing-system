@@ -1,0 +1,13 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "serverless-help-desk"
+resolve_s3 = true
+s3_prefix = "serverless-help-desk"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+profile = "new-account"
+
+[default.global.parameters]
+region = "us-east-1"
