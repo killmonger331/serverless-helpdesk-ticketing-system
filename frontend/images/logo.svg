@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Broken laptop icon</title>
+  <desc id="desc">A stylized laptop with a cracked screen and damaged keyboard.</desc>
+
+  <defs>
+    <linearGradient id="screenGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9fd8ff"/>
+      <stop offset="100%" stop-color="#4b7bec"/>
+    </linearGradient>
+    <linearGradient id="bodyShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9dee8"/>
+      <stop offset="100%" stop-color="#9ea7b8"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <!-- Screen shell -->
+    <rect x="170" y="85" width="460" height="325" rx="24" fill="#2e3440"/>
+    <rect x="194" y="110" width="412" height="270" rx="12" fill="url(#screenGlow)"/>
+
+    <!-- Screen reflection -->
+    <path d="M215 128 H395 L280 360 H215 Z" fill="#ffffff" opacity="0.13"/>
+
+    <!-- Cracks -->
+    <g fill="none" stroke="#f7fbff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M430 150 L405 205 L455 245 L420 295 L468 360"/>
+      <path d="M405 205 L352 186"/>
+      <path d="M455 245 L520 212"/>
+      <path d="M420 295 L355 326"/>
+      <path d="M455 245 L500 300"/>
+    </g>
+    <circle cx="430" cy="150" r="11" fill="#ffffff"/>
+
+    <!-- Hinges -->
+    <rect x="225" y="397" width="90" height="22" rx="8" fill="#646d7d"/>
+    <rect x="485" y="397" width="90" height="22" rx="8" fill="#646d7d"/>
+
+    <!-- Laptop base -->
+    <path d="M120 415 H680 L740 500 Q746 513 730 519 H70 Q54 513 60 500 Z" fill="url(#bodyShade)"/>
+    <path d="M90 487 H710" stroke="#7e8796" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Keyboard panel -->
+    <rect x="190" y="438" width="420" height="48" rx="10" fill="#697386"/>
+    <g fill="#c7ced9">
+      <rect x="205" y="447" width="32" height="12" rx="3"/>
+      <rect x="245" y="447" width="32" height="12" rx="3"/>
+      <rect x="285" y="447" width="32" height="12" rx="3"/>
+      <rect x="325" y="447" width="32" height="12" rx="3"/>
+      <rect x="365" y="447" width="32" height="12" rx="3"/>
+      <rect x="405" y="447" width="32" height="12" rx="3"/>
+      <rect x="445" y="447" width="32" height="12" rx="3"/>
+      <rect x="485" y="447" width="32" height="12" rx="3"/>
+      <rect x="525" y="447" width="32" height="12" rx="3"/>
+      <rect x="565" y="447" width="30" height="12" rx="3"/>
+
+      <rect x="220" y="466" width="34" height="12" rx="3"/>
+      <rect x="262" y="466" width="34" height="12" rx="3"/>
+      <rect x="304" y="466" width="34" height="12" rx="3"/>
+      <rect x="346" y="466" width="34" height="12" rx="3"/>
+      <rect x="388" y="466" width="86" height="12" rx="3"/>
+      <rect x="482" y="466" width="34" height="12" rx="3"/>
+      <rect x="524" y="466" width="34" height="12" rx="3"/>
+      <rect x="566" y="466" width="28" height="12" rx="3"/>
+    </g>
+
+    <!-- Missing/damaged keys -->
+    <rect x="485" y="447" width="32" height="12" rx="3" fill="#3b4252"/>
+    <path d="M488 450 L514 457 L492 462 Z" fill="#ff6b6b"/>
+
+    <!-- Trackpad -->
+    <rect x="320" y="494" width="160" height="18" rx="9" fill="#b8c0ce"/>
+
+    <!-- Broken corner -->
+    <path d="M665 416 L700 444 L676 462 L640 439 Z" fill="#5b6372"/>
+    <path d="M682 432 L724 451" stroke="#ff6b6b" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- Small warning sparks -->
+  <g stroke="#ffb020" stroke-width="10" stroke-linecap="round">
+    <path d="M635 150 l28 -24"/>
+    <path d="M654 184 h38"/>
+    <path d="M628 115 v-35"/>
+  </g>
+</svg>

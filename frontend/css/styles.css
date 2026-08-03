@@ -1,0 +1,298 @@
+/* ------------------------------
+   Base styles
+------------------------------ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family:
+    Inter,
+    Arial,
+    Helvetica,
+    sans-serif;
+  color: #152238;
+  background:
+    linear-gradient(
+      135deg,
+      #eaf2ff 0%,
+      #f6f9ff 50%,
+      #e6effc 100%
+    );
+}
+
+
+/* ------------------------------
+   Header and logo
+------------------------------ */
+
+.site-header {
+  width: 100%;
+  padding: 24px 36px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.organization-logo {
+    width: 64px;
+    height: 64px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+}
+
+.organization-name {
+  margin: 0 0 3px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #123a70;
+}
+
+.organization-subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+/* ------------------------------
+   Page layout
+------------------------------ */
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 40px 24px 80px;
+}
+
+
+/* ------------------------------
+   Center form rectangle
+------------------------------ */
+
+.ticket-card {
+  width: 100%;
+  max-width: 720px;
+  padding: 42px;
+  border: 1px solid #d8e1ef;
+  border-radius: 18px;
+  background-color: #ffffff;
+  box-shadow:
+    0 22px 55px rgb(30 64 109 / 12%),
+    0 4px 12px rgb(30 64 109 / 6%);
+}
+
+.card-heading {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 12px;
+  color: #102a4c;
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.15;
+}
+
+.intro-text {
+  max-width: 560px;
+  margin: 0 auto;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+
+/* ------------------------------
+   Form
+------------------------------ */
+
+#ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+label {
+  color: #243b5a;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  outline: none;
+  background-color: #ffffff;
+  color: #172033;
+  font: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+input,
+select {
+  min-height: 48px;
+  padding: 0 14px;
+}
+
+textarea {
+  min-height: 150px;
+  padding: 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: #94a3b8;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2563eb;
+  background-color: #fbfdff;
+  box-shadow: 0 0 0 4px rgb(37 99 235 / 12%);
+}
+
+
+/* ------------------------------
+   Button
+------------------------------ */
+
+.submit-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 2px;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #1d4ed8;
+  font-size: 16px;
+  font-weight: 700;
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.submit-button:hover {
+  background-color: #1e40af;
+  box-shadow: 0 8px 18px rgb(29 78 216 / 20%);
+  transform: translateY(-1px);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+
+/* ------------------------------
+   Message area
+------------------------------ */
+
+.message-container {
+  min-height: 28px;
+}
+
+#form-message {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #166534;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+
+/* ------------------------------
+   Mobile layout
+------------------------------ */
+
+@media (max-width: 700px) {
+  .site-header {
+    padding: 20px;
+  }
+
+  .page-container {
+    padding: 22px 16px 50px;
+  }
+
+  .ticket-card {
+    padding: 28px 22px;
+    border-radius: 14px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .organization-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .logo-placeholder {
+    width: 48px;
+    height: 48px;
+  }
+
+  .organization-name {
+    font-size: 15px;
+  }
+
+  .ticket-card {
+    padding: 24px 18px;
+  }
+}

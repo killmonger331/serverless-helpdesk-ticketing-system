@@ -1,56 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
+
   <title>Submit Help Desk Ticket</title>
+
+  <link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body>
-  <main>
-    <h1>Submit a Help Desk Ticket</h1>
-
-    <form id="ticket-form">
-      <label for="title">Title</label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        required
+  <header class="site-header">
+    <div class="brand">
+      <!-- Replace this with your real logo later -->
+      <img
+        src="./images/logo.svg"
+        alt="Organization Logo"
+        class="organization-logo"
       >
 
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        name="description"
-        required
-      ></textarea>
+      <div>
+        <p class="organization-name">Killmonger's Help Desk</p>
+        <p class="organization-subtitle">I fix computers ;)</p>
+      </div>
+    </div>
+  </header>
 
-      <label for="priority">Priority</label>
-      <select id="priority" name="priority" required>
-        <option value="4">Priority 4 — Single user</option>
-        <option value="3">Priority 3 — Multiple users</option>
-        <option value="2">Priority 2 — Site-wide</option>
-        <option value="1">Priority 1 — Enterprise-wide</option>
-      </select>
+  <main class="page-container">
+    <section class="ticket-card">
+      <div class="card-heading">
+        <p class="eyebrow">Support Request</p>
+        <h1>Submit a Help Desk Ticket</h1>
+        <p class="intro-text">
+          Describe the issue you are experiencing, and our support team will
+          review your request.
+        </p>
+      </div>
 
-      <label for="requesterEmail">Email</label>
-      <input
-        id="requesterEmail"
-        name="requesterEmail"
-        type="email"
-        required
-      >
+      <form id="ticket-form">
+        <div class="form-group">
+          <label for="title">Title</label>
 
-      <button type="submit">Submit Ticket</button>
-    </form>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            placeholder="Example: Unable to connect to VPN"
+            required
+          >
+        </div>
 
-    <p id="form-message" role="status"></p>
+        <div class="form-group">
+          <label for="description">Description</label>
+
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Describe the issue, any error messages, and troubleshooting steps already attempted."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="priority">Priority</label>
+
+            <select id="priority" name="priority" required>
+              <option value="4">Priority 4 — Single user</option>
+              <option value="3">Priority 3 — Multiple users</option>
+              <option value="2">Priority 2 — Site-wide</option>
+              <option value="1">Priority 1 — Enterprise-wide</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="requesterEmail">Email</label>
+
+            <input
+              id="requesterEmail"
+              name="requesterEmail"
+              type="email"
+              placeholder="employee@example.com"
+              required
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="submit-button">
+          Submit Ticket
+        </button>
+
+        <div class="message-container">
+          <p id="form-message" role="status"></p>
+        </div>
+      </form>
+    </section>
   </main>
 
   <script type="module" src="./js/main.js"></script>
 </body>
-</html>
