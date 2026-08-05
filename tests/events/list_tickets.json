@@ -1,0 +1,16 @@
+{
+  "resource": "/tickets",
+  "path": "/tickets",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "multiValueHeaders": {},
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {},
+  "body": null,
+  "isBase64Encoded": false
+}

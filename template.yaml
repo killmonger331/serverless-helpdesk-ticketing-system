@@ -46,7 +46,23 @@ Resources:
           Properties:
             Path: /tickets
             Method: post
-
+  ListTicketsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: list_tickets.app.lambda_handler
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TicketsTable
+      Events:
+        ListTicketsApi:
+          Type: Api
+          Properties:
+            Path: /tickets
+            Method: get
 Outputs:
   ApiUrl:
     Description: API endpoint for creating tickets
