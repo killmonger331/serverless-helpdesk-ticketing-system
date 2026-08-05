@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Help Desk Administration</title>
+
+  <link
+    rel="stylesheet"
+    href="./css/styles.css"
+  >
+</head>
+
+<body class="admin-page">
+  <header class="admin-header">
+    <div>
+      <p class="admin-eyebrow">Operations Console</p>
+      <h1>Help Desk Ticket Queue</h1>
+      <p>
+        Review incoming support requests and monitor their current status.
+      </p>
+    </div>
+
+    <div class="admin-header-actions">
+      <span id="ticket-count" class="ticket-count">
+        0 tickets
+      </span>
+
+      <button
+        id="refresh-button"
+        type="button"
+        class="secondary-button"
+      >
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="queue-controls" aria-label="Ticket queue filters">
+      <div class="filter-control">
+        <label for="status-filter">Status</label>
+
+        <select id="status-filter">
+          <option value="ALL">All statuses</option>
+          <option value="OPEN">Open</option>
+          <option value="IN_PROGRESS">In progress</option>
+          <option value="RESOLVED">Resolved</option>
+          <option value="CLOSED">Closed</option>
+        </select>
+      </div>
+
+      <div class="filter-control">
+        <label for="priority-filter">Priority</label>
+
+        <select id="priority-filter">
+          <option value="ALL">All priorities</option>
+          <option value="1">Priority 1</option>
+          <option value="2">Priority 2</option>
+          <option value="3">Priority 3</option>
+          <option value="4">Priority 4</option>
+        </select>
+      </div>
+
+      <div class="filter-control search-control">
+        <label for="ticket-search">Search</label>
+
+        <input
+          id="ticket-search"
+          type="search"
+          placeholder="Ticket ID, title, or requester"
+          autocomplete="off"
+        >
+      </div>
+    </section>
+
+    <p
+      id="queue-message"
+      class="queue-message"
+      role="status"
+      aria-live="polite"
+    >
+      Loading tickets...
+    </p>
+
+    <section
+      id="ticket-table-container"
+      class="ticket-table-container"
+      hidden
+    >
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th scope="col">Ticket</th>
+            <th scope="col">Title</th>
+            <th scope="col">Requester</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Status</th>
+            <th scope="col">Created</th>
+          </tr>
+        </thead>
+
+        <tbody id="ticket-table-body"></tbody>
+      </table>
+    </section>
+
+    <section
+      id="empty-state"
+      class="empty-state"
+      hidden
+    >
+      <h2>No tickets found</h2>
+      <p>
+        No tickets match the selected queue filters.
+      </p>
+    </section>
+  </main>
+
+  <script
+    type="module"
+    src="./js/admin.js"
+  ></script>
+</body>
+</html>

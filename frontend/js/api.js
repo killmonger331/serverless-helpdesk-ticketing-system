@@ -45,8 +45,6 @@ async function parseResponse(response) {
 
   return responseBody;
 }
-
-
 export async function createTicket(ticketData) {
   const response = await fetch(`${API_BASE_URL}/tickets`, {
     method: "POST",
