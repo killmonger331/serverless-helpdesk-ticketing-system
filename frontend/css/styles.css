@@ -28,7 +28,6 @@ body {
     );
 }
 
-
 /* ------------------------------
    Header and logo
 ------------------------------ */
@@ -37,13 +36,11 @@ body {
   width: 100%;
   padding: 24px 36px;
 }
-
 .brand {
   display: flex;
   align-items: center;
   gap: 14px;
 }
-
 .organization-logo {
     width: 64px;
     height: 64px;
@@ -52,21 +49,17 @@ body {
 
     border-radius: 8px;
 }
-
 .organization-name {
   margin: 0 0 3px;
   font-size: 17px;
   font-weight: 700;
   color: #123a70;
 }
-
 .organization-subtitle {
   margin: 0;
   color: #64748b;
   font-size: 13px;
 }
-
-
 /* ------------------------------
    Page layout
 ------------------------------ */
@@ -95,12 +88,10 @@ body {
     0 22px 55px rgb(30 64 109 / 12%),
     0 4px 12px rgb(30 64 109 / 6%);
 }
-
 .card-heading {
   margin-bottom: 32px;
   text-align: center;
 }
-
 .eyebrow {
   margin: 0 0 8px;
   color: #2563eb;
@@ -109,14 +100,12 @@ body {
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-
 h1 {
   margin: 0 0 12px;
   color: #102a4c;
   font-size: clamp(28px, 4vw, 38px);
   line-height: 1.15;
 }
-
 .intro-text {
   max-width: 560px;
   margin: 0 auto;
@@ -243,7 +232,6 @@ select:focus {
 .message-container {
   min-height: 28px;
 }
-
 #form-message {
   margin: 0;
   padding: 0;
@@ -263,35 +251,28 @@ select:focus {
   .site-header {
     padding: 20px;
   }
-
   .page-container {
     padding: 22px 16px 50px;
   }
-
   .ticket-card {
     padding: 28px 22px;
     border-radius: 14px;
   }
-
   .form-row {
     grid-template-columns: 1fr;
   }
-
   .organization-subtitle {
     display: none;
   }
 }
-
 @media (max-width: 420px) {
   .logo-placeholder {
     width: 48px;
     height: 48px;
   }
-
   .organization-name {
     font-size: 15px;
   }
-
   .ticket-card {
     padding: 24px 18px;
   }
