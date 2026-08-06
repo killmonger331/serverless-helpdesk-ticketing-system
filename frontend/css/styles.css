@@ -277,14 +277,12 @@ select:focus {
     padding: 24px 18px;
   }
 }
-
 .admin-page {
   min-height: 100vh;
   margin: 0;
   background: #f4f6f9;
   color: #1f2937;
 }
-
 .admin-header {
   display: flex;
   align-items: flex-end;
@@ -294,33 +292,27 @@ select:focus {
   background: #ffffff;
   border-bottom: 1px solid #dce1e8;
 }
-
 .admin-header h1 {
   margin: 0.25rem 0 0.5rem;
 }
-
 .admin-header p {
   margin: 0;
 }
-
 .admin-eyebrow {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-
 .admin-header-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-
 .ticket-count {
   font-weight: 700;
   white-space: nowrap;
 }
-
 .secondary-button {
   padding: 0.7rem 1rem;
   border: 1px solid #aeb7c3;
@@ -328,21 +320,17 @@ select:focus {
   background: #ffffff;
   cursor: pointer;
 }
-
 .secondary-button:hover {
   background: #f3f4f6;
 }
-
 .secondary-button:disabled {
   cursor: wait;
   opacity: 0.65;
 }
-
 .admin-main {
   width: min(1400px, calc(100% - 2rem));
   margin: 2rem auto;
 }
-
 .queue-controls {
   display: grid;
   grid-template-columns: 180px 180px minmax(240px, 1fr);
@@ -353,18 +341,15 @@ select:focus {
   border: 1px solid #dce1e8;
   border-radius: 0.75rem;
 }
-
 .filter-control {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
-
 .filter-control label {
   font-size: 0.85rem;
   font-weight: 700;
 }
-
 .filter-control select,
 .filter-control input {
   width: 100%;
@@ -374,26 +359,22 @@ select:focus {
   border-radius: 0.45rem;
   background: #ffffff;
 }
-
 .queue-message {
   padding: 1rem;
   background: #ffffff;
   border: 1px solid #dce1e8;
   border-radius: 0.75rem;
 }
-
 .ticket-table-container {
   overflow-x: auto;
   background: #ffffff;
   border: 1px solid #dce1e8;
   border-radius: 0.75rem;
 }
-
 .ticket-table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .ticket-table th,
 .ticket-table td {
   padding: 0.9rem 1rem;
@@ -401,27 +382,22 @@ select:focus {
   border-bottom: 1px solid #e5e7eb;
   white-space: nowrap;
 }
-
 .ticket-table th {
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   background: #f8fafc;
 }
-
 .ticket-table tbody tr:hover {
   background: #f8fafc;
 }
-
 .ticket-table tbody tr:last-child td {
   border-bottom: 0;
 }
-
 .ticket-id-cell {
   font-family: monospace;
   font-weight: 700;
 }
-
 .status-badge,
 .priority-badge {
   display: inline-block;
@@ -430,47 +406,38 @@ select:focus {
   font-size: 0.78rem;
   font-weight: 700;
 }
-
 .status-open {
   background: #dbeafe;
   color: #1e40af;
 }
-
 .status-in_progress {
   background: #fef3c7;
   color: #92400e;
 }
-
 .status-resolved {
   background: #d1fae5;
   color: #065f46;
 }
-
 .status-closed {
   background: #e5e7eb;
   color: #374151;
 }
-
 .priority-1 {
   background: #fee2e2;
   color: #991b1b;
 }
-
 .priority-2 {
   background: #ffedd5;
   color: #9a3412;
 }
-
 .priority-3 {
   background: #fef3c7;
   color: #854d0e;
 }
-
 .priority-4 {
   background: #e0e7ff;
   color: #3730a3;
 }
-
 .empty-state {
   padding: 3rem 1rem;
   text-align: center;
@@ -478,13 +445,11 @@ select:focus {
   border: 1px solid #dce1e8;
   border-radius: 0.75rem;
 }
-
 @media (max-width: 800px) {
   .admin-header {
     align-items: flex-start;
     flex-direction: column;
   }
-
   .queue-controls {
     grid-template-columns: 1fr;
   }

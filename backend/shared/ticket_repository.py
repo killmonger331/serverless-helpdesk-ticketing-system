@@ -39,6 +39,17 @@ def list_tickets() -> list[dict[str, Any]]:
 
     return tickets
 
+    def get_ticket(ticket_id: str) -> dict[str, Any] | None:
+    table = get_ticket_table()
+
+    response = table.get_item(
+        Key={
+            "ticketId": ticket_id,
+        }
+    )
+
+    return response.get("Item")
+
 
 
 
