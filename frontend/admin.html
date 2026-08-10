@@ -42,7 +42,10 @@
   </header>
 
   <main class="admin-main">
-    <section class="queue-controls" aria-label="Ticket queue filters">
+    <section
+      class="queue-controls"
+      aria-label="Ticket queue filters"
+    >
       <div class="filter-control">
         <label for="status-filter">Status</label>
 
@@ -118,6 +121,80 @@
       <p>
         No tickets match the selected queue filters.
       </p>
+    </section>
+
+    <section
+      id="ticket-detail-panel"
+      class="ticket-detail-panel"
+      aria-labelledby="ticket-detail-heading"
+      hidden
+    >
+      <div class="ticket-detail-header">
+        <div>
+          <p class="admin-eyebrow">Ticket details</p>
+          <h2 id="ticket-detail-heading">Selected ticket</h2>
+        </div>
+
+        <button
+          id="close-detail-button"
+          type="button"
+          class="secondary-button"
+        >
+          Close
+        </button>
+      </div>
+
+      <p
+        id="ticket-detail-message"
+        class="queue-message"
+        role="status"
+        hidden
+      ></p>
+
+      <dl
+        id="ticket-detail-content"
+        class="ticket-detail-grid"
+      >
+        <div>
+          <dt>Ticket ID</dt>
+          <dd id="detail-ticket-id">—</dd>
+        </div>
+
+        <div>
+          <dt>Status</dt>
+          <dd id="detail-status">—</dd>
+        </div>
+
+        <div>
+          <dt>Priority</dt>
+          <dd id="detail-priority">—</dd>
+        </div>
+
+        <div>
+          <dt>Requester</dt>
+          <dd id="detail-requester">—</dd>
+        </div>
+
+        <div>
+          <dt>Created</dt>
+          <dd id="detail-created">—</dd>
+        </div>
+
+        <div>
+          <dt>Last updated</dt>
+          <dd id="detail-updated">—</dd>
+        </div>
+
+        <div class="ticket-detail-wide">
+          <dt>Title</dt>
+          <dd id="detail-title">—</dd>
+        </div>
+
+        <div class="ticket-detail-wide">
+          <dt>Description</dt>
+          <dd id="detail-description">—</dd>
+        </div>
+      </dl>
     </section>
   </main>
 

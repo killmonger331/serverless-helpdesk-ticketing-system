@@ -1,0 +1,18 @@
+{
+  "resource": "/tickets/{ticketId}",
+  "path": "/tickets/TKT-E1568626",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "multiValueHeaders": {},
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": {
+    "ticketId": "TKT-EE229DC0"
+  },
+  "stageVariables": null,
+  "requestContext": {},
+  "body": null,
+  "isBase64Encoded": false
+}

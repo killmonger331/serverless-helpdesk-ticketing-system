@@ -40,3 +40,23 @@ export async function listTickets() {
 
   return parseResponse(response);
 }
+
+export async function getTicket(ticketId) {
+  if (!ticketId) {
+    throw new Error("A ticket ID is required.");
+  }
+
+  const encodedTicketId = encodeURIComponent(ticketId);
+
+  const response = await fetch(
+    `${API_BASE_URL}/tickets/${encodedTicketId}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return parseResponse(response);
+}
