@@ -13,7 +13,7 @@ Globals:
 
   Api:
     Cors:
-      AllowMethods: "'POST,OPTIONS'"
+      AllowMethods: "'GET,POST,PATCH,OPTIONS'"
       AllowHeaders: "'Content-Type'"
       AllowOrigin: "'http://localhost:5500'"
 
@@ -36,7 +36,7 @@ Resources:
       Handler: create_ticket.app.lambda_handler
       Environment:
         Variables:
-          TICKET_TABLE_NAME: !Ref TicketsTable
+          TICKETS_TABLE_NAME: !Ref TicketsTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref TicketsTable
@@ -46,6 +46,10 @@ Resources:
           Properties:
             Path: /tickets
             Method: post
+
+
+
+            
   ListTicketsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -62,6 +66,23 @@ Resources:
           Type: Api
           Properties:
             Path: /tickets
+            Method: get
+  GetTicketFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: get_ticket.app.lambda_handler
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TicketsTable
+      Events:
+        GetTicketApi:
+          Type: Api
+          Properties:
+            Path: /tickets/{ticketId}
             Method: get
 Outputs:
   ApiUrl:

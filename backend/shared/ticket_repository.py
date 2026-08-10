@@ -6,7 +6,7 @@ import boto3
 dynamodb = boto3.resource("dynamodb")
 
 def get_ticket_table():
-    table_name = os.environ["TICKET_TABLE_NAME"]
+    table_name = os.environ["TICKETS_TABLE_NAME"]
     return dynamodb.Table(table_name)
 
 def create_ticket(ticket: dict[str, Any]) -> None:
@@ -39,7 +39,7 @@ def list_tickets() -> list[dict[str, Any]]:
 
     return tickets
 
-    def get_ticket(ticket_id: str) -> dict[str, Any] | None:
+def get_ticket(ticket_id: str) -> dict[str, Any] | None:
     table = get_ticket_table()
 
     response = table.get_item(
