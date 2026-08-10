@@ -61,7 +61,7 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict:
                 "status": "OPEN",
             },  
         )
-    exept ValidationError as exc:
+    except ValidationError as exc:
         logger.warning("Ticket validation failed: %s", exc)
 
         return api_response(
@@ -70,7 +70,7 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict:
                 "message": str(exc)
             },
         )
-        
+
     except Exception:
         logger.exception("Unexpected error while creating ticket")
 
