@@ -50,3 +50,58 @@ def validate_create_ticket(data: Any) -> dict:
         "priority": priority,
         "requesterEmail": requester_email.strip().lower(),
     }
+
+ALLOWED_STATUSES = {
+    "OPEN",
+    "IN_PROGRESS",
+    "RESOLVED",
+    "CLOSED",
+}
+
+
+def validate_update_ticket(data: Any) -> dict:
+    if not isinstance(data, dict):
+        raise ValidationError("Request body must be a JSON object.")
+
+    if not data:
+        raise ValidationError(
+            "At least one field must be provided for update."
+        )
+
+    allowed_fields = {"status", "priority"}
+
+    unexpected_fields = set(data.keys()) - allowed_fields
+
+    if unexpected_fields:
+        raise ValidationError(
+            "Only status and priority can be updated."
+        )
+
+    validated_data = {}
+
+    if "status" in data:
+        status = data["status"]
+
+        if not isinstance(status, str):
+            raise ValidationError("Status must be a string.")
+
+        status = status.strip().upper()
+
+        if status not in ALLOWED_STATUSES:
+            raise ValidationError(
+                "Status must be OPEN, IN_PROGRESS, RESOLVED, or CLOSED."
+            )
+
+        validated_data["status"] = status
+
+    if "priority" in data:
+        priority = data["priority"]
+
+        if priority not in {1, 2, 3, 4}:
+            raise ValidationError(
+                "Priority must be an integer from 1 through 4."
+            )
+
+        validated_data["priority"] = priority
+
+    return validated_data

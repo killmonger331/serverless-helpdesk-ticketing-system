@@ -1,6 +1,7 @@
 # repository; data access layer; responsible for all communication between application (Lambda/business logic) and DynamoDB
 import os
 from typing import Any
+from datetime import datetime, timezone
 import boto3
 
 dynamodb = boto3.resource("dynamodb")
@@ -50,6 +51,45 @@ def get_ticket(ticket_id: str) -> dict[str, Any] | None:
 
     return response.get("Item")
 
+def update_ticket(
+    ticket_id: str,
+    updates: dict[str, Any],
+) -> dict[str, Any] | None:
+    table = get_ticket_table()
 
+    updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
+    expression_names = {
+        "#updatedAt": "updatedAt",
+    }
 
+    expression_values = {
+        ":updatedAt": updated_at,
+    }
+
+    update_parts = [
+        "#updatedAt = :updatedAt",
+    ]
+
+    if "status" in updates:
+        expression_names["#status"] = "status"
+        expression_values[":status"] = updates["status"]
+        update_parts.append("#status = :status")
+
+    if "priority" in updates:
+        expression_names["#priority"] = "priority"
+        expression_values[":priority"] = updates["priority"]
+        update_parts.append("#priority = :priority")
+
+    response = table.update_item(
+        Key={
+            "ticketId": ticket_id,
+        },
+        UpdateExpression="SET " + ", ".join(update_parts),
+        ExpressionAttributeNames=expression_names,
+        ExpressionAttributeValues=expression_values,
+        ConditionExpression="attribute_exists(ticketId)",
+        ReturnValues="ALL_NEW",
+    )
+
+    return response.get("Attributes")

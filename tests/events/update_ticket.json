@@ -1,0 +1,12 @@
+{
+  "httpMethod": "PATCH",
+  "path": "/tickets/TKT-97C9ED01",
+  "pathParameters": {
+    "ticketId": "TKT-97C9ED01"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"status\":\"IN_PROGRESS\",\"priority\":2}",
+  "isBase64Encoded": false
+}
