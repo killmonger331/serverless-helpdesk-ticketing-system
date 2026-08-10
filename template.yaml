@@ -84,6 +84,24 @@ Resources:
           Properties:
             Path: /tickets/{ticketId}
             Method: get
+  UpdateTicketFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: update_ticket.app.lambda_handler
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TicketsTable
+      Events:
+        UpdateTicketApi:
+          Type: Api
+          Properties:
+            Path: /tickets/{ticketId}
+            Method: patch
+            
 Outputs:
   ApiUrl:
     Description: API endpoint for creating tickets
