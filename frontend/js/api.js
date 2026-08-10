@@ -1,6 +1,4 @@
 import { API_BASE_URL } from "./config.js";
-
-
 async function parseResponse(response) {
   let responseBody;
 
@@ -11,7 +9,6 @@ async function parseResponse(response) {
       `The server returned an invalid response (${response.status}).`
     );
   }
-
   if (!response.ok) {
     throw new Error(
       responseBody.error ||
@@ -22,8 +19,6 @@ async function parseResponse(response) {
 
   return responseBody;
 }
-
-
 export async function createTicket(ticketData) {
   const response = await fetch(`${API_BASE_URL}/tickets`, {
     method: "POST",
@@ -35,8 +30,6 @@ export async function createTicket(ticketData) {
 
   return parseResponse(response);
 }
-
-
 export async function listTickets() {
   const response = await fetch(`${API_BASE_URL}/tickets`, {
     method: "GET",
