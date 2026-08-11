@@ -7,7 +7,7 @@ s3_prefix = "serverless-help-desk"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
-profile = "new-account"
+profile = "default"
 
 [default.global.parameters]
 region = "us-east-1"

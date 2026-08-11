@@ -21,9 +21,9 @@ def lambda_handler(event: dict[str, Any], context: Any) -> None:
             elif event_type == "TICKET_STATUS_CHANGED":
                 send_status_changed_email(notification)
             else:
-                logger.warning(
-                    "Unknown notification event type: %s",
-                    event_type,
+                logger.info(
+                    "SES event received: %s",
+                    json.dumps(notification),
                 )
         except Exception:
             logger.exception(
@@ -90,6 +90,7 @@ def send_email(
                     },
                 },
             },
+            ConfigurationSetName="help-desk-notifications",
         )
 
         logger.info(

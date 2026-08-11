@@ -30,7 +30,6 @@ Resources:
           KeyType: HASH
   NotificationTopic:
     Type: AWS::SNS::Topic
-
   CreateTicketFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -131,7 +130,37 @@ Resources:
           Type: SNS
           Properties:
             Topic: !Ref NotificationTopic
-        
+  AdminUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: serverless-help-desk-admins
+
+      UsernameAttributes:
+        - email
+
+      AutoVerifiedAttributes:
+        - email
+
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+  AdminUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: serverless-help-desk-admin-client
+      UserPoolId: !Ref AdminUserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      PreventUserExistenceErrors: ENABLED
 Outputs:
   ApiUrl:
     Description: API endpoint for creating tickets
@@ -140,3 +169,11 @@ Outputs:
   TicketsTableName:
     Description: DynamoDB tickets table
     Value: !Ref TicketsTable
+
+  AdminUserPoolId:
+    Description: Cognito User Pool ID for help desk administrators
+    Value: !Ref AdminUserPool
+
+  AdminUserPoolClientId:
+    Description: Cognito App Client ID for help desk administrators
+    Value: !Ref AdminUserPoolClient
