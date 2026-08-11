@@ -69,41 +69,53 @@ export async function listTickets() {
   return parseResponse(response);
 }
 
+
+
+
+
+
+
 export async function getTicket(ticketId) {
   if (!ticketId) {
     throw new Error("A ticket ID is required.");
   }
-
-  const encodedTicketId = encodeURIComponent(ticketId);
+  const encodedTicketId =
+    encodeURIComponent(ticketId);
+  const headers =
+    await getAdminHeaders();
 
   const response = await fetch(
     `${API_BASE_URL}/tickets/${encodedTicketId}`,
     {
       method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
+      headers,
     }
   );
-
   return parseResponse(response);
 }
-export async function updateTicket(ticketId, updates) {
+
+export async function updateTicket(
+  ticketId,
+  updates
+) {
   if (!ticketId) {
     throw new Error("A ticket ID is required.");
   }
 
-  const encodedTicketId = encodeURIComponent(ticketId);
+  const encodedTicketId =
+    encodeURIComponent(ticketId);
+
+  const headers =
+    await getAdminHeaders();
 
   const response = await fetch(
     `${API_BASE_URL}/tickets/${encodedTicketId}`,
     {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(updates),
+      headers,
+
+      body:
+        JSON.stringify(updates),
     }
   );
 
