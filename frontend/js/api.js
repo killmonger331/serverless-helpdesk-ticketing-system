@@ -1,4 +1,29 @@
 import { API_BASE_URL } from "./config.js";
+import {
+  getValidAccessToken,
+  clearSession,
+} from "./session.js";
+
+async function getAdminHeaders() {
+  const token =
+    await getValidAccessToken();
+  if (!token) {
+    clearSession();
+    window.location.href =
+      "./login.html";
+    throw new Error(
+      "Administrator authentication required."
+    );
+  }
+  return {
+    "Content-Type":
+      "application/json",
+
+    "Authorization":
+      token,
+  };
+}
+
 async function parseResponse(response) {
   let responseBody;
 

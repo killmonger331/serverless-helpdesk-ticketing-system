@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
-Description: Serverless Help Desk - first vertical slice
+Description: Serverless Help Desk
 
 Globals:
   Function:
@@ -11,81 +11,121 @@ Globals:
     Architectures:
       - x86_64
 
-  Api:
-    Cors:
-      AllowMethods: "'GET,POST,PATCH,OPTIONS'"
-      AllowHeaders: "'Content-Type'"
-      AllowOrigin: "'http://localhost:5500'"
 
 Resources:
+
+  HelpDeskApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+
+      Cors:
+        AllowMethods: "'GET,POST,PATCH,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'http://localhost:5500'"
+
+      Auth:
+        DefaultAuthorizer: AdminCognitoAuthorizer
+        AddDefaultAuthorizerToCorsPreflight: false
+        
+        Authorizers:
+          AdminCognitoAuthorizer:
+            UserPoolArn: !GetAtt AdminUserPool.Arn
+
+
   TicketsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       BillingMode: PAY_PER_REQUEST
+
       AttributeDefinitions:
         - AttributeName: ticketId
           AttributeType: S
+
       KeySchema:
         - AttributeName: ticketId
           KeyType: HASH
+
+
   NotificationTopic:
     Type: AWS::SNS::Topic
+
+
   CreateTicketFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
       Handler: create_ticket.app.lambda_handler
+
       Environment:
         Variables:
           TICKETS_TABLE_NAME: !Ref TicketsTable
           NOTIFICATION_TOPIC_ARN: !Ref NotificationTopic
+
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref TicketsTable
+
         - Statement:
             - Effect: Allow
               Action:
                 - sns:Publish
               Resource: !Ref NotificationTopic
+
       Events:
         CreateTicketApi:
           Type: Api
           Properties:
+            RestApiId: !Ref HelpDeskApi
             Path: /tickets
             Method: post
-  
+
+            Auth:
+              Authorizer: NONE
+
+
   ListTicketsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
       Handler: list_tickets.app.lambda_handler
+
       Environment:
         Variables:
           TICKETS_TABLE_NAME: !Ref TicketsTable
+
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref TicketsTable
+
       Events:
         ListTicketsApi:
           Type: Api
           Properties:
+            RestApiId: !Ref HelpDeskApi
             Path: /tickets
             Method: get
+
+
   GetTicketFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
       Handler: get_ticket.app.lambda_handler
+
       Environment:
         Variables:
           TICKETS_TABLE_NAME: !Ref TicketsTable
+
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref TicketsTable
+
       Events:
         GetTicketApi:
           Type: Api
           Properties:
+            RestApiId: !Ref HelpDeskApi
             Path: /tickets/{ticketId}
             Method: get
   UpdateTicketFunction:
@@ -104,11 +144,12 @@ Resources:
             - Effect: Allow
               Action:
                 - sns:Publish
-              Resource: !Ref NotificationTopic    
+              Resource: !Ref NotificationTopic
       Events:
         UpdateTicketApi:
           Type: Api
           Properties:
+            RestApiId: !Ref HelpDeskApi
             Path: /tickets/{ticketId}
             Method: patch
   NotificationFunction:
@@ -134,13 +175,10 @@ Resources:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: serverless-help-desk-admins
-
       UsernameAttributes:
         - email
-
       AutoVerifiedAttributes:
         - email
-
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -148,7 +186,6 @@ Resources:
           RequireLowercase: true
           RequireNumbers: true
           RequireSymbols: true
-
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true
   AdminUserPoolClient:
@@ -163,17 +200,14 @@ Resources:
       PreventUserExistenceErrors: ENABLED
 Outputs:
   ApiUrl:
-    Description: API endpoint for creating tickets
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/tickets"
-
+    Description: Base API endpoint
+    Value: !Sub "https://${HelpDeskApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
   TicketsTableName:
     Description: DynamoDB tickets table
     Value: !Ref TicketsTable
-
   AdminUserPoolId:
     Description: Cognito User Pool ID for help desk administrators
     Value: !Ref AdminUserPool
-
   AdminUserPoolClientId:
     Description: Cognito App Client ID for help desk administrators
     Value: !Ref AdminUserPoolClient

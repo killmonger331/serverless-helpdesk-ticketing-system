@@ -1,9 +1,12 @@
 import {
+  requireAuthentication,
+  logout,
+} from "./session.js";
+import {
   getTicket,
   listTickets,
   updateTicket,
 } from "./api.js";
-
 
 const tableContainer = document.getElementById("ticket-table-container");
 const tableBody = document.getElementById("ticket-table-body");
@@ -14,7 +17,6 @@ const refreshButton = document.getElementById("refresh-button");
 const statusFilter = document.getElementById("status-filter");
 const priorityFilter = document.getElementById("priority-filter");
 const ticketSearch = document.getElementById("ticket-search");
-
 const detailPanel = document.getElementById("ticket-detail-panel");
 const detailMessage = document.getElementById("ticket-detail-message");
 const detailContent = document.getElementById("ticket-detail-content");
@@ -27,17 +29,30 @@ const detailCreated = document.getElementById("detail-created");
 const detailUpdated = document.getElementById("detail-updated");
 const detailTitle = document.getElementById("detail-title");
 const detailDescription = document.getElementById("detail-description");
-
 const updateForm = document.getElementById("ticket-update-form");
 const updateStatus = document.getElementById("update-status");
 const updatePriority = document.getElementById("update-priority");
 const updateTicketButton = document.getElementById("update-ticket-button");
 const updateMessage = document.getElementById("ticket-update-message");
-
-
+const authenticated =
+  await requireAuthentication();
+if (!authenticated) {
+  throw new Error(
+    "Authentication required."
+  );
+}
+const logoutButton =
+  document.getElementById(
+    "logout-button"
+  );
+logoutButton.addEventListener(
+  "click",
+  () => {
+    logout();
+  }
+);
 let tickets = [];
 let selectedTicketId = null;
-
 
 function formatStatus(status) {
   const statusNames = {

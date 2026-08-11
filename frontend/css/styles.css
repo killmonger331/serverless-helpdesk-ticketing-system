@@ -125,6 +125,20 @@ h1 {
   gap: 22px;
 }
 
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+#login-message {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
