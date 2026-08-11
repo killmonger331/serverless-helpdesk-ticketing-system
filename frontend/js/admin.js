@@ -1,4 +1,9 @@
-import { getTicket, listTickets } from "./api.js";
+import {
+  getTicket,
+  listTickets,
+  updateTicket,
+} from "./api.js";
+
 
 const tableContainer = document.getElementById("ticket-table-container");
 const tableBody = document.getElementById("ticket-table-body");
@@ -23,7 +28,16 @@ const detailUpdated = document.getElementById("detail-updated");
 const detailTitle = document.getElementById("detail-title");
 const detailDescription = document.getElementById("detail-description");
 
+const updateForm = document.getElementById("ticket-update-form");
+const updateStatus = document.getElementById("update-status");
+const updatePriority = document.getElementById("update-priority");
+const updateTicketButton = document.getElementById("update-ticket-button");
+const updateMessage = document.getElementById("ticket-update-message");
+
+
 let tickets = [];
+let selectedTicketId = null;
+
 
 function formatStatus(status) {
   const statusNames = {
@@ -37,10 +51,15 @@ function formatStatus(status) {
 }
 
 function formatCreatedAt(createdAt) {
-  if (!createdAt) return "Unknown";
+  if (!createdAt) {
+    return "Unknown";
+  }
 
   const date = new Date(createdAt);
-  if (Number.isNaN(date.getTime())) return createdAt;
+
+  if (Number.isNaN(date.getTime())) {
+    return createdAt;
+  }
 
   return new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
@@ -48,61 +67,115 @@ function formatCreatedAt(createdAt) {
   }).format(date);
 }
 
+
 function createCell(text, className = "") {
   const cell = document.createElement("td");
+
   cell.textContent = text;
 
-  if (className) cell.className = className;
+  if (className) {
+    cell.className = className;
+  }
 
   return cell;
 }
 
+
 function createStatusBadge(status) {
   const badge = document.createElement("span");
-  badge.className = ["status-badge", `status-${String(status).toLowerCase()}`].join(" ");
+
+  badge.className = [
+    "status-badge",
+    `status-${String(status).toLowerCase()}`,
+  ].join(" ");
+
   badge.textContent = formatStatus(status);
 
   return badge;
 }
 
+
 function createPriorityBadge(priority) {
   const badge = document.createElement("span");
-  badge.className = ["priority-badge", `priority-${priority}`].join(" ");
+
+  badge.className = [
+    "priority-badge",
+    `priority-${priority}`,
+  ].join(" ");
+
   badge.textContent = `P${priority}`;
 
   return badge;
 }
+
 
 function createTicketRow(ticket) {
   const row = document.createElement("tr");
 
   row.dataset.ticketId = ticket.ticketId || "";
 
-  row.appendChild(createCell(ticket.ticketId || "Unknown", "ticket-id-cell"));
-  row.appendChild(createCell(ticket.title || "Untitled ticket"));
-  row.appendChild(createCell(ticket.requesterEmail || "Unknown"));
+  row.appendChild(
+    createCell(
+      ticket.ticketId || "Unknown",
+      "ticket-id-cell"
+    )
+  );
+
+  row.appendChild(
+    createCell(
+      ticket.title || "Untitled ticket"
+    )
+  );
+
+  row.appendChild(
+    createCell(
+      ticket.requesterEmail || "Unknown"
+    )
+  );
 
   const priorityCell = document.createElement("td");
-  priorityCell.appendChild(createPriorityBadge(ticket.priority ?? "?"));
+
+  priorityCell.appendChild(
+    createPriorityBadge(
+      ticket.priority ?? "?"
+    )
+  );
+
   row.appendChild(priorityCell);
 
   const statusCell = document.createElement("td");
-  statusCell.appendChild(createStatusBadge(ticket.status));
+
+  statusCell.appendChild(
+    createStatusBadge(ticket.status)
+  );
+
   row.appendChild(statusCell);
 
-  row.appendChild(createCell(formatCreatedAt(ticket.createdAt)));
+  row.appendChild(
+    createCell(
+      formatCreatedAt(ticket.createdAt)
+    )
+  );
 
   row.tabIndex = 0;
   row.setAttribute("role", "button");
-  row.setAttribute("aria-label", `Open ticket ${ticket.ticketId}`);
+
+  row.setAttribute(
+    "aria-label",
+    `Open ticket ${ticket.ticketId}`
+  );
 
   row.addEventListener("click", () => {
     openTicketDetails(ticket.ticketId);
   });
 
   row.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
       event.preventDefault();
+
       openTicketDetails(ticket.ticketId);
     }
   });
@@ -110,27 +183,59 @@ function createTicketRow(ticket) {
   return row;
 }
 
+
 function renderTicketDetails(ticket) {
-  detailTicketId.textContent = ticket.ticketId || "Unknown";
-  detailStatus.textContent = formatStatus(ticket.status);
+  detailTicketId.textContent =
+    ticket.ticketId || "Unknown";
+
+  detailStatus.textContent =
+    formatStatus(ticket.status);
 
   detailPriority.textContent =
     ticket.priority !== undefined
       ? `Priority ${ticket.priority}`
       : "Unknown";
 
-  detailRequester.textContent = ticket.requesterEmail || "Unknown";
-  detailCreated.textContent = formatCreatedAt(ticket.createdAt);
-  detailUpdated.textContent = formatCreatedAt(ticket.updatedAt);
-  detailTitle.textContent = ticket.title || "Untitled ticket";
-  detailDescription.textContent = ticket.description || "No description provided.";
+  detailRequester.textContent =
+    ticket.requesterEmail || "Unknown";
+
+  detailCreated.textContent =
+    formatCreatedAt(ticket.createdAt);
+
+  detailUpdated.textContent =
+    formatCreatedAt(ticket.updatedAt);
+
+  detailTitle.textContent =
+    ticket.title || "Untitled ticket";
+
+  detailDescription.textContent =
+    ticket.description ||
+    "No description provided.";
+
+  updateStatus.value =
+    ticket.status || "OPEN";
+
+  updatePriority.value =
+    ticket.priority !== undefined
+      ? String(ticket.priority)
+      : "4";
 }
 
+
 async function openTicketDetails(ticketId) {
+  selectedTicketId = ticketId;
+
   detailPanel.hidden = false;
+
   detailMessage.hidden = false;
-  detailMessage.textContent = "Loading ticket details...";
+  detailMessage.textContent =
+    "Loading ticket details...";
+
   detailContent.hidden = true;
+  updateForm.hidden = true;
+
+  updateMessage.hidden = true;
+  updateMessage.textContent = "";
 
   detailPanel.scrollIntoView({
     behavior: "smooth",
@@ -141,33 +246,59 @@ async function openTicketDetails(ticketId) {
     const result = await getTicket(ticketId);
 
     if (!result.ticket) {
-      throw new Error("The server did not return a ticket.");
+      throw new Error(
+        "The server did not return a ticket."
+      );
     }
 
     renderTicketDetails(result.ticket);
 
     detailMessage.hidden = true;
     detailContent.hidden = false;
+    updateForm.hidden = false;
   } catch (error) {
     detailMessage.hidden = false;
-    detailMessage.textContent = `Unable to load ticket: ${error.message}`;
+
+    detailMessage.textContent =
+      `Unable to load ticket: ${error.message}`;
   }
 }
 
+
 function closeTicketDetails() {
+  selectedTicketId = null;
+
   detailPanel.hidden = true;
   detailContent.hidden = true;
   detailMessage.hidden = true;
+
+  updateForm.hidden = true;
+  updateMessage.hidden = true;
+  updateMessage.textContent = "";
 }
 
+
 function getFilteredTickets() {
-  const selectedStatus = statusFilter.value;
-  const selectedPriority = priorityFilter.value;
-  const searchTerm = ticketSearch.value.trim().toLowerCase();
+  const selectedStatus =
+    statusFilter.value;
+
+  const selectedPriority =
+    priorityFilter.value;
+
+  const searchTerm =
+    ticketSearch.value
+      .trim()
+      .toLowerCase();
 
   return tickets.filter((ticket) => {
-    const matchesStatus = selectedStatus === "ALL" || ticket.status === selectedStatus;
-    const matchesPriority = selectedPriority === "ALL" || String(ticket.priority) === selectedPriority;
+    const matchesStatus =
+      selectedStatus === "ALL" ||
+      ticket.status === selectedStatus;
+
+    const matchesPriority =
+      selectedPriority === "ALL" ||
+      String(ticket.priority) ===
+        selectedPriority;
 
     const searchableText = [
       ticket.ticketId,
@@ -179,33 +310,54 @@ function getFilteredTickets() {
       .join(" ")
       .toLowerCase();
 
-    const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
+    const matchesSearch =
+      !searchTerm ||
+      searchableText.includes(searchTerm);
 
-    return matchesStatus && matchesPriority && matchesSearch;
+    return (
+      matchesStatus &&
+      matchesPriority &&
+      matchesSearch
+    );
   });
 }
+
 
 function updateTicketCount(displayedCount) {
   const totalCount = tickets.length;
 
   if (displayedCount === totalCount) {
-    ticketCount.textContent = `${totalCount} ${totalCount === 1 ? "ticket" : "tickets"}`;
+    ticketCount.textContent =
+      `${totalCount} ${
+        totalCount === 1
+          ? "ticket"
+          : "tickets"
+      }`;
+
     return;
   }
 
-  ticketCount.textContent = `${displayedCount} of ${totalCount} tickets`;
+  ticketCount.textContent =
+    `${displayedCount} of ${totalCount} tickets`;
 }
 
+
 function renderTickets() {
-  const filteredTickets = getFilteredTickets();
+  const filteredTickets =
+    getFilteredTickets();
 
   tableBody.replaceChildren();
-  updateTicketCount(filteredTickets.length);
+
+  updateTicketCount(
+    filteredTickets.length
+  );
+
   queueMessage.hidden = true;
 
   if (filteredTickets.length === 0) {
     tableContainer.hidden = true;
     emptyState.hidden = false;
+
     return;
   }
 
@@ -213,32 +365,121 @@ function renderTickets() {
   tableContainer.hidden = false;
 
   for (const ticket of filteredTickets) {
-    tableBody.appendChild(createTicketRow(ticket));
+    tableBody.appendChild(
+      createTicketRow(ticket)
+    );
   }
 }
 
+
 async function loadTickets() {
   refreshButton.disabled = true;
-  refreshButton.textContent = "Refreshing...";
+
+  refreshButton.textContent =
+    "Refreshing...";
+
   queueMessage.hidden = false;
-  queueMessage.textContent = "Loading tickets...";
+  queueMessage.textContent =
+    "Loading tickets...";
+
   tableContainer.hidden = true;
   emptyState.hidden = true;
 
   try {
-    const result = await listTickets();
+    const result =
+      await listTickets();
 
-    tickets = Array.isArray(result.tickets) ? result.tickets : [];
+    tickets =
+      Array.isArray(result.tickets)
+        ? result.tickets
+        : [];
 
     renderTickets();
   } catch (error) {
     tickets = [];
+
     queueMessage.hidden = false;
-    queueMessage.textContent = `Unable to load tickets: ${error.message}`;
-    ticketCount.textContent = "Unavailable";
+
+    queueMessage.textContent =
+      `Unable to load tickets: ${error.message}`;
+
+    ticketCount.textContent =
+      "Unavailable";
   } finally {
     refreshButton.disabled = false;
-    refreshButton.textContent = "Refresh";
+
+    refreshButton.textContent =
+      "Refresh";
+  }
+}
+
+
+async function handleTicketUpdate(event) {
+  event.preventDefault();
+
+  if (!selectedTicketId) {
+    updateMessage.hidden = false;
+
+    updateMessage.textContent =
+      "No ticket is currently selected.";
+
+    return;
+  }
+
+  const updates = {
+    status: updateStatus.value,
+    priority: Number(
+      updatePriority.value
+    ),
+  };
+
+  updateTicketButton.disabled = true;
+  updateTicketButton.textContent =
+    "Updating...";
+  updateMessage.hidden = false;
+  updateMessage.textContent =
+    "Updating ticket...";
+  try {
+    const result = await updateTicket(
+      selectedTicketId,
+      updates
+    );
+    if (!result.ticket) {
+      throw new Error(
+        "The server did not return the updated ticket."
+      );
+    }
+    const updatedTicket =
+      result.ticket;
+    renderTicketDetails(
+      updatedTicket
+    );
+    const ticketIndex =
+      tickets.findIndex(
+        (ticket) =>
+          ticket.ticketId ===
+          updatedTicket.ticketId
+      );
+    if (ticketIndex !== -1) {
+      tickets[ticketIndex] =
+        updatedTicket;
+    }
+    renderTickets();
+
+    updateMessage.hidden = false;
+
+    updateMessage.textContent =
+      "Ticket updated successfully.";
+  } catch (error) {
+    updateMessage.hidden = false;
+
+    updateMessage.textContent =
+      `Unable to update ticket: ${error.message}`;
+  } finally {
+    updateTicketButton.disabled = false;
+
+    updateTicketButton.textContent =
+      "Update ticket";
   }
 }
 
@@ -247,5 +488,6 @@ refreshButton.addEventListener("click", loadTickets);
 statusFilter.addEventListener("change", renderTickets);
 priorityFilter.addEventListener("change", renderTickets);
 ticketSearch.addEventListener("input", renderTickets);
+updateForm.addEventListener("submit", handleTicketUpdate);
 
 loadTickets();

@@ -28,6 +28,8 @@ Resources:
       KeySchema:
         - AttributeName: ticketId
           KeyType: HASH
+  NotificationTopic:
+    Type: AWS::SNS::Topic
 
   CreateTicketFunction:
     Type: AWS::Serverless::Function
@@ -37,19 +39,22 @@ Resources:
       Environment:
         Variables:
           TICKETS_TABLE_NAME: !Ref TicketsTable
+          NOTIFICATION_TOPIC_ARN: !Ref NotificationTopic
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref TicketsTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref NotificationTopic
       Events:
         CreateTicketApi:
           Type: Api
           Properties:
             Path: /tickets
             Method: post
-
-
-
-            
+  
   ListTicketsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -92,16 +97,43 @@ Resources:
       Environment:
         Variables:
           TICKETS_TABLE_NAME: !Ref TicketsTable
+          NOTIFICATION_TOPIC_ARN: !Ref NotificationTopic
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref TicketsTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref NotificationTopic    
       Events:
         UpdateTicketApi:
           Type: Api
           Properties:
             Path: /tickets/{ticketId}
             Method: patch
-            
+  NotificationTopic:
+
+  NotificationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: notification.app.lambda_handler
+      Environment:
+        Variables:
+          SENDER_EMAIL: richardmorales_24@hotmail.com
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+              Resource: "*"
+      Events:
+        NotificationEvent:
+          Type: SNS
+          Properties:
+            Topic: !Ref NotificationTopic
+        
 Outputs:
   ApiUrl:
     Description: API endpoint for creating tickets

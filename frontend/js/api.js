@@ -60,3 +60,25 @@ export async function getTicket(ticketId) {
 
   return parseResponse(response);
 }
+
+export async function updateTicket(ticketId, updates) {
+  if (!ticketId) {
+    throw new Error("A ticket ID is required.");
+  }
+
+  const encodedTicketId = encodeURIComponent(ticketId);
+
+  const response = await fetch(
+    `${API_BASE_URL}/tickets/${encodedTicketId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(updates),
+    }
+  );
+
+  return parseResponse(response);
+}
