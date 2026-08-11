@@ -140,22 +140,22 @@ export async function refreshSession() {
     )
   );
 
-  return authenticationResult.AccessToken;
+  return authenticationResult.IdToken;
 }
 
-export async function getValidAccessToken() {
+export async function getValidIdToken() {
   if (!hasSession()) {
     return null;
   }
 
   if (!isSessionExpired()) {
-    return getAccessToken();
+    return getIdToken();
   }
 
   try {
     await refreshSession();
 
-    return getAccessToken();
+    return getIdToken();
   }
 
   catch (error) {
@@ -170,7 +170,7 @@ export async function getValidAccessToken() {
 
 export async function requireAuthentication() {
   const token =
-    await getValidAccessToken();
+    await getValidIdToken();
 
 
   if (!token) {

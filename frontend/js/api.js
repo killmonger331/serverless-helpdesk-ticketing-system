@@ -1,12 +1,12 @@
 import { API_BASE_URL } from "./config.js";
 import {
-  getValidAccessToken,
+  getValidIdToken,
   clearSession,
 } from "./session.js";
 
 async function getAdminHeaders() {
   const token =
-    await getValidAccessToken();
+    await getValidIdToken();
   if (!token) {
     clearSession();
     window.location.href =
@@ -56,13 +56,16 @@ export async function createTicket(ticketData) {
   return parseResponse(response);
 }
 export async function listTickets() {
-  const response = await fetch(`${API_BASE_URL}/tickets`, {
-    method: "GET",
-    headers: {
-      "Accept": "application/json",
-    },
-  });
+  const headers =
+    await getAdminHeaders();
 
+  const response = await fetch(
+    `${API_BASE_URL}/tickets`,
+    {
+      method: "GET",
+      headers,
+    }
+  );
   return parseResponse(response);
 }
 
@@ -85,7 +88,6 @@ export async function getTicket(ticketId) {
 
   return parseResponse(response);
 }
-
 export async function updateTicket(ticketId, updates) {
   if (!ticketId) {
     throw new Error("A ticket ID is required.");
