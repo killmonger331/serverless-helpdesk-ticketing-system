@@ -572,3 +572,80 @@ select:focus {
   .ticket-detail-wide { grid-column: auto; }
   .ticket-update-form { grid-template-columns: 1fr; }
 }
+
+.ticket-result-card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.ticket-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ticket-result-header h2 {
+  margin: 0.25rem 0 0;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: #e7f0ff;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.ticket-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ticket-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.65;
+}
+
+.detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.lookup-message {
+  margin-top: 1rem;
+}
+
+.ticket-status-link {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.ticket-status-link a {
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .ticket-result-header {
+    flex-direction: column;
+  }
+
+  .ticket-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
