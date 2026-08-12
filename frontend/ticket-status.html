@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Ticket Status</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+  <main class="ticket-status-page">
+
+    <section class="ticket-status-card">
+      <h1>Check Ticket Status</h1>
+
+      <p>
+        Enter your ticket number and the email address used when
+        submitting the ticket.
+      </p>
+
+      <form id="ticketLookupForm">
+
+        <div class="form-group">
+          <label for="ticketId">Ticket Number</label>
+          <input
+            type="text"
+            id="ticketId"
+            name="ticketId"
+            placeholder="TKT-12345678"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="requesterEmail">Email Address</label>
+          <input
+            type="email"
+            id="requesterEmail"
+            name="requesterEmail"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <button type="submit">
+          Check Status
+        </button>
+
+      </form>
+
+      <p id="lookupMessage" hidden></p>
+
+      <section id="ticketResult" hidden>
+        <h2>Ticket Details</h2>
+
+        <dl>
+          <div>
+            <dt>Ticket Number</dt>
+            <dd id="resultTicketId"></dd>
+          </div>
+
+          <div>
+            <dt>Title</dt>
+            <dd id="resultTitle"></dd>
+          </div>
+
+          <div>
+            <dt>Status</dt>
+            <dd id="resultStatus"></dd>
+          </div>
+
+          <div>
+            <dt>Priority</dt>
+            <dd id="resultPriority"></dd>
+          </div>
+
+          <div>
+            <dt>Created</dt>
+            <dd id="resultCreated"></dd>
+          </div>
+
+          <div>
+            <dt>Last Updated</dt>
+            <dd id="resultUpdated"></dd>
+          </div>
+        </dl>
+      </section>
+
+      <p>
+        Need to submit a new request?
+        <a href="./index.html">Create a ticket</a>
+      </p>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="./js/ticket-status.js"></script>
+</body>
+</html>

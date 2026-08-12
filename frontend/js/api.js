@@ -69,12 +69,6 @@ export async function listTickets() {
   return parseResponse(response);
 }
 
-
-
-
-
-
-
 export async function getTicket(ticketId) {
   if (!ticketId) {
     throw new Error("A ticket ID is required.");
@@ -83,7 +77,6 @@ export async function getTicket(ticketId) {
     encodeURIComponent(ticketId);
   const headers =
     await getAdminHeaders();
-
   const response = await fetch(
     `${API_BASE_URL}/tickets/${encodedTicketId}`,
     {
@@ -118,6 +111,21 @@ export async function updateTicket(
         JSON.stringify(updates),
     }
   );
+
+  return parseResponse(response);
+}
+
+export async function lookupTicket(ticketId, requesterEmail) {
+  const response = await fetch(`${API_BASE_URL}/tickets/lookup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ticketId,
+      requesterEmail,
+    }),
+  });
 
   return parseResponse(response);
 }
