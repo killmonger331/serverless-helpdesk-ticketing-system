@@ -198,6 +198,32 @@ Resources:
         - ALLOW_USER_PASSWORD_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
       PreventUserExistenceErrors: ENABLED
+
+  CustomerLookupFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: customer_lookup.app.lambda_handler
+
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TicketsTable
+
+      Events:
+        CustomerLookupApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelpDeskApi
+            Path: /tickets/lookup
+            Method: post
+
+            Auth:
+              Authorizer: NONE
+
 Outputs:
   ApiUrl:
     Description: Base API endpoint

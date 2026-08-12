@@ -67,12 +67,20 @@ function renderTicket(ticket) {
   ticketResult.hidden = false;
 }
 
-
 ticketLookupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const ticketId = ticketIdInput.value.trim();
+  const ticketId = ticketIdInput.value.trim().toUpperCase();
   const requesterEmail = requesterEmailInput.value.trim();
+
+  if (!ticketId || !requesterEmail) {
+    lookupMessage.hidden = false;
+    lookupMessage.textContent =
+      "Ticket number and email address are required.";
+
+    ticketResult.hidden = true;
+    return;
+  }
 
   lookupMessage.hidden = false;
   lookupMessage.textContent = "Looking up ticket...";
