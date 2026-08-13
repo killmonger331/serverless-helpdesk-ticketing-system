@@ -1,8 +1,14 @@
-name: CI
+name: CI/CD
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   validate-and-build:
@@ -36,3 +42,51 @@ jobs:
       - name: Build SAM application
         run: |
           sam build
+
+
+  deploy:
+    needs: validate-and-build
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::015809853573:role/ServerlessHelpDeskGitHubDeployRole
+          aws-region: us-east-1
+
+      - name: Set up AWS SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Build SAM application
+        run: |
+          sam build
+
+      - name: Deploy SAM application
+        run: |
+          sam deploy \
+            --stack-name serverless-help-desk \
+            --region us-east-1 \
+            --resolve-s3 \
+            --capabilities CAPABILITY_IAM \
+            --role-arn arn:aws:iam::015809853573:role/ServerlessHelpDeskCloudFormationExecutionRole \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset
+
+      - name: Deploy frontend to S3
+        run: |
+          aws s3 sync frontend/ \
+            s3://serverless-help-desk-frontendbucket-qafnz4njkhmg \
+            --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E14FB2KSM3MU7Z \
+            --paths "/*"
