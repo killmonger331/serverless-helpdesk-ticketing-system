@@ -58,6 +58,14 @@ ALLOWED_STATUSES = {
     "CLOSED",
 }
 
+ALLOWED_CATEGORIES = {
+    "NETWORK",
+    "HARDWARE",
+    "SOFTWARE",
+    "ACCOUNT_ACCESS",
+    "EMAIL",
+    "OTHER",
+}
 
 def validate_update_ticket(data: Any) -> dict:
     if not isinstance(data, dict):
@@ -68,13 +76,13 @@ def validate_update_ticket(data: Any) -> dict:
             "At least one field must be provided for update."
         )
 
-    allowed_fields = {"status", "priority"}
+    allowed_fields = {"status", "priority", "category"}
 
     unexpected_fields = set(data.keys()) - allowed_fields
 
     if unexpected_fields:
         raise ValidationError(
-            "Only status and priority can be updated."
+            "Only status, priority, and category can be updated."
         )
 
     validated_data = {}
@@ -101,7 +109,20 @@ def validate_update_ticket(data: Any) -> dict:
             raise ValidationError(
                 "Priority must be an integer from 1 through 4."
             )
-
         validated_data["priority"] = priority
+        
+    if "category" in data:
+        category = data["category"]
+
+        if not isinstance(category, str):
+            raise ValidationError("Category must be a string.")
+
+        category = category.strip().upper()
+        if category not in ALLOWED_CATEGORIES:
+            raise ValidationError(
+                "Category must be NETWORK, HARDWARE, SOFTWARE, ACCOUNT_ACCESS, EMAIL, or OTHER."
+            )
+        validated_data["category"] = category
+        
 
     return validated_data

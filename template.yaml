@@ -22,7 +22,7 @@ Resources:
       Cors:
         AllowMethods: "'GET,POST,PATCH,OPTIONS'"
         AllowHeaders: "'Content-Type,Authorization'"
-        AllowOrigin: "'http://localhost:5500'"
+        AllowOrigin: "'https://d3dn4ad0a3w7w4.cloudfront.net'"
 
       Auth:
         DefaultAuthorizer: AdminCognitoAuthorizer
@@ -223,6 +223,95 @@ Resources:
 
             Auth:
               Authorizer: NONE
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+
+  FrontendOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${AWS::StackName}-frontend-oac"
+        Description: Access control for the frontend S3 bucket
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+  FrontendCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub "${AWS::StackName}-frontend-cache"
+        DefaultTTL: 3600
+        MaxTTL: 86400
+        MinTTL: 0
+
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+
+          CookiesConfig:
+            CookieBehavior: none
+
+          HeadersConfig:
+            HeaderBehavior: none
+
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  FrontendDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+
+        Origins:
+          - Id: FrontendS3Origin
+            DomainName: !GetAtt FrontendBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt FrontendOriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+
+        DefaultCacheBehavior:
+          TargetOriginId: FrontendS3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          CachePolicyId: !Ref FrontendCachePolicy
+
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+  
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontReadAccess
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action:
+              - s3:GetObject
+            Resource: !Sub "${FrontendBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub
+                  - "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${DistributionId}"
+                  - DistributionId: !Ref FrontendDistribution
 
 Outputs:
   ApiUrl:
@@ -237,3 +326,12 @@ Outputs:
   AdminUserPoolClientId:
     Description: Cognito App Client ID for help desk administrators
     Value: !Ref AdminUserPoolClient
+  FrontendBucketName:
+    Description: S3 bucket containing the frontend application
+    Value: !Ref FrontendBucket
+  CloudFrontDistributionId:
+    Description: CloudFront distribution ID
+    Value: !Ref FrontendDistribution
+  FrontendUrl:
+    Description: Public HTTPS URL for the frontend
+    Value: !Sub "https://${FrontendDistribution.DomainName}"

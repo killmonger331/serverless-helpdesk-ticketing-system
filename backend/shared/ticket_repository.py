@@ -81,6 +81,11 @@ def update_ticket(
         expression_values[":priority"] = updates["priority"]
         update_parts.append("#priority = :priority")
 
+    if "category" in updates:
+        expression_names["#category"] = "category"
+        expression_values[":category"] = updates["category"]
+        update_parts.append("#category = :category")
+
     response = table.update_item(
         Key={
             "ticketId": ticket_id,
