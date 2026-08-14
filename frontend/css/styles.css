@@ -649,3 +649,28 @@ select:focus {
     grid-template-columns: 1fr;
   }
 }
+.danger-button {
+  background-color: #2454d6;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 42px;
+}
+
+.danger-button:hover {
+  background-color: #1d46b5;
+}
+
+.danger-button:focus-visible {
+  outline: 3px solid rgba(36, 84, 214, 0.3);
+  outline-offset: 2px;
+}
+
+.danger-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
