@@ -115,6 +115,30 @@ export async function updateTicket(
   return parseResponse(response);
 }
 
+export async function deleteTicket(ticketId) {
+  if (!ticketId) {
+    throw new Error(
+      "A ticket ID is required."
+    );
+  }
+
+  const encodedTicketId =
+    encodeURIComponent(ticketId);
+
+  const headers =
+    await getAdminHeaders();
+
+  const response = await fetch(
+    `${API_BASE_URL}/tickets/${encodedTicketId}`,
+    {
+      method: "DELETE",
+      headers,
+    }
+  );
+
+  return parseResponse(response);
+}
+
 export async function lookupTicket(ticketId, requesterEmail) {
   const response = await fetch(`${API_BASE_URL}/tickets/lookup`, {
     method: "POST",

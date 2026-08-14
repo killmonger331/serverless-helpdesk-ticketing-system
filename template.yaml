@@ -223,6 +223,32 @@ Resources:
 
             Auth:
               Authorizer: NONE
+
+  DeleteTicketFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: delete_ticket.app.lambda_handler
+      Environment:
+        Variables:
+          TICKETS_TABLE_NAME: !Ref TicketsTable
+          NOTIFICATION_TOPIC_ARN: !Ref NotificationTopic
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TicketsTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref NotificationTopic
+      Events:
+        DeleteTicketApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelpDeskApi
+            Path: /tickets/{ticketId}
+            Method: delete
+
   FrontendBucket:
     Type: AWS::S3::Bucket
     Properties:

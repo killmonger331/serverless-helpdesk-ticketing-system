@@ -3,6 +3,7 @@ import {
   logout,
 } from "./session.js";
 import {
+  deleteTicket,
   getTicket,
   listTickets,
   updateTicket,
@@ -33,6 +34,7 @@ const updateForm = document.getElementById("ticket-update-form");
 const updateStatus = document.getElementById("update-status");
 const updatePriority = document.getElementById("update-priority");
 const updateTicketButton = document.getElementById("update-ticket-button");
+const deleteTicketButton = document.getElementById("delete-ticket-button");
 const updateMessage = document.getElementById("ticket-update-message");
 const authenticated =
   await requireAuthentication();
@@ -197,43 +199,37 @@ function createTicketRow(ticket) {
 
   return row;
 }
-
-
 function renderTicketDetails(ticket) {
   detailTicketId.textContent =
     ticket.ticketId || "Unknown";
-
   detailStatus.textContent =
     formatStatus(ticket.status);
-
   detailPriority.textContent =
     ticket.priority !== undefined
       ? `Priority ${ticket.priority}`
       : "Unknown";
-
   detailRequester.textContent =
     ticket.requesterEmail || "Unknown";
-
   detailCreated.textContent =
     formatCreatedAt(ticket.createdAt);
-
   detailUpdated.textContent =
     formatCreatedAt(ticket.updatedAt);
-
   detailTitle.textContent =
     ticket.title || "Untitled ticket";
-
   detailDescription.textContent =
     ticket.description ||
     "No description provided.";
-
   updateStatus.value =
     ticket.status || "OPEN";
-
   updatePriority.value =
     ticket.priority !== undefined
       ? String(ticket.priority)
       : "4";
+  const canDelete =
+    ticket.status === "RESOLVED" ||
+    ticket.status === "CLOSED";
+
+  deleteTicketButton.hidden = !canDelete;
 }
 
 
@@ -288,6 +284,7 @@ function closeTicketDetails() {
   detailMessage.hidden = true;
 
   updateForm.hidden = true;
+  deleteTicketButton.hidden = true;
   updateMessage.hidden = true;
   updateMessage.textContent = "";
 }
@@ -498,11 +495,93 @@ async function handleTicketUpdate(event) {
   }
 }
 
+async function handleTicketDelete() {
+  if (!selectedTicketId) {
+    updateMessage.hidden = false;
+    updateMessage.textContent =
+      "No ticket is currently selected.";
+
+    return;
+  }
+
+  const selectedTicket =
+    tickets.find(
+      (ticket) =>
+        ticket.ticketId ===
+        selectedTicketId
+    );
+
+  if (!selectedTicket) {
+    updateMessage.hidden = false;
+    updateMessage.textContent =
+      "The selected ticket could not be found.";
+
+    return;
+  }
+
+  const canDelete =
+    selectedTicket.status === "RESOLVED" ||
+    selectedTicket.status === "CLOSED";
+
+  if (!canDelete) {
+    updateMessage.hidden = false;
+    updateMessage.textContent =
+      "Only resolved or closed tickets can be deleted.";
+
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Permanently delete ${selectedTicketId}? ` +
+      "This action cannot be undone."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  deleteTicketButton.disabled = true;
+  deleteTicketButton.textContent =
+    "Deleting...";
+
+  updateMessage.hidden = false;
+  updateMessage.textContent =
+    "Deleting ticket...";
+
+  try {
+    await deleteTicket(
+      selectedTicketId
+    );
+
+    tickets =
+      tickets.filter(
+        (ticket) =>
+          ticket.ticketId !==
+          selectedTicketId
+      );
+
+    closeTicketDetails();
+    renderTickets();
+
+  } catch (error) {
+    updateMessage.hidden = false;
+
+    updateMessage.textContent =
+      `Unable to delete ticket: ${error.message}`;
+
+  } finally {
+    deleteTicketButton.disabled = false;
+    deleteTicketButton.textContent =
+      "Delete ticket";
+  }
+}
+
 closeDetailButton.addEventListener("click", closeTicketDetails);
 refreshButton.addEventListener("click", loadTickets);
 statusFilter.addEventListener("change", renderTickets);
 priorityFilter.addEventListener("change", renderTickets);
 ticketSearch.addEventListener("input", renderTickets);
 updateForm.addEventListener("submit", handleTicketUpdate);
-
+deleteTicketButton.addEventListener("click", handleTicketDelete);
 loadTickets();
