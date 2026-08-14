@@ -15,6 +15,34 @@ The frontend is stored in a private Amazon S3 bucket and is accessible publicly 
 
 ---
 
+## Application Screenshots
+
+### Customer Portal
+
+Customers can submit new support requests through the public customer interface.
+
+![Customer ticket submission portal](docs/screenshots/customer-portal.png)
+
+### Customer Ticket Lookup
+
+Customers can securely check the status of an existing ticket using their ticket ID and email address.
+
+![Customer ticket lookup](docs/screenshots/ticket-lookup.png)
+
+### Administrator Login
+
+Administrative functionality is protected using Amazon Cognito authentication.
+
+![Administrator login](docs/screenshots/admin-login.png)
+
+### Administrator Dashboard
+
+Authenticated administrators can search, filter, inspect, and update support tickets.
+
+![Administrator dashboard](docs/screenshots/admin-dashboard.png)
+
+---
+
 # Architecture
 
 The application uses a serverless AWS architecture:
