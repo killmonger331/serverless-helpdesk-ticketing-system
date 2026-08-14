@@ -650,27 +650,21 @@ select:focus {
   }
 }
 .danger-button {
-  background-color: #2454d6;
+  min-height: 48px;
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #dc2626;
   color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1.25rem;
-  font: inherit;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  min-height: 42px;
 }
 
 .danger-button:hover {
-  background-color: #1d46b5;
-}
-
-.danger-button:focus-visible {
-  outline: 3px solid rgba(36, 84, 214, 0.3);
-  outline-offset: 2px;
+  background: #b91c1c;
 }
 
 .danger-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  cursor: wait;
+  opacity: 0.65;
 }
