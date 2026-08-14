@@ -109,25 +109,5 @@ def delete_ticket(
         ConditionExpression="attribute_exists(ticketId)",
         ReturnValues="ALL_OLD",
     )
-    except ClientError as exc:
-        error_code = exc.response.get(
-            "Error",
-            {},
-        ).get("Code")
-
-        if error_code == "ConditionalCheckFailedException":
-            return api_response(
-                404,
-                {"message": "Ticket not found."},
-            )
-
-        logger.exception(
-            "DynamoDB error while deleting ticket."
-        )
-
-        return api_response(
-            500,
-            {"message": "Unable to delete ticket."},
-        )
     return response.get("Attributes")
 
